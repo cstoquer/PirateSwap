@@ -1,0 +1,14 @@
+{
+  "appID": "cdd13a4d248e4b4592786cab672a9026",
+  "dependencies": {
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.5.3"
+  },
+  "shortName": "pirateSwap",
+  "studio": {
+    "domain": "studio.example.com",
+    "name": "Cedric Stoquer",
+    "stagingDomain": "staging.example.com"
+  },
+  "supportedOrientations": ["portrait"],
+  "title": "Pirate Swap"
+}
