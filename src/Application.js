@@ -63,7 +63,7 @@ export default class Application extends View {
 		this.view.style.backgroundColor = '#6eeeff';
 
 		var rootView = new StackView({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 0,
 			width: 320,

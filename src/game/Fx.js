@@ -20,13 +20,13 @@ export default class Fx extends View {
 
 		// create particle engine and particles
 		this.pEngine = new ParticleEngine({
-			superview: this,
+			parent: this,
 			centerAnchor: true
 		});
 
 		// create animated sprite
 		this.sprite = new SpriteView({
-			superview: this,
+			parent: this,
 			width: 64,
 			height: 64,
 			url: 'resources/images/fx',

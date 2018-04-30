@@ -51,7 +51,7 @@ export default class Island extends View {
 			this._tiles.push(row);
 			for (var y = 0; y < GRID_HEIGHT; y++) {
 				var tile = new ImageView({
-					superview: this,
+					parent: this,
 					width: TILE_SIZE,
 					height: TILE_SIZE,
 					x: TILE_SIZE * x,

@@ -20,7 +20,7 @@ export default class Money extends View {
 		super.init(opts);
 
 		new ImageView({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 0,
 			image: 'resources/images/gold_number_dollar.png',
@@ -28,7 +28,7 @@ export default class Money extends View {
 		});
 
 		this._scoreView = new ScoreView({
-			superview: this,
+			parent: this,
 			x: 42,
 			y: 6,
 			width: 122,

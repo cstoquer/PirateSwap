@@ -23,14 +23,14 @@ export default class TitleScreen extends View {
 	build () {
 		// clouds animation
 		new Clouds({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 200
 		});
 
 		// sea
 		new View({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 200,
 			width: 320,
@@ -40,14 +40,14 @@ export default class TitleScreen extends View {
 
 		// boat animation
 		var boat = new Boat({
-			superview: this,
+			parent: this,
 			x: 100,
 			y: 150
 		});
 
 		// title
 		new TextView({
-			superview: this,
+			parent: this,
 			text: 'PIRATE SWAP',
 			color: '#c44d29',
 			x: 0,
@@ -67,7 +67,7 @@ export default class TitleScreen extends View {
 
 		// start button
 		new Button({
-			superview: this,
+			parent: this,
 			title: 'START',
 			on: {
 				down: bind(this, 'startGame', ButtonView.states.UP)

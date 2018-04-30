@@ -50,7 +50,7 @@ export default class Grid extends GestureView {
 			ctor: Gem,
 			initCount: GRID_WIDTH * GRID_HEIGHT,
 			initOpts: {
-				superview: this
+				parent: this
 			}
 		});
 
@@ -72,7 +72,7 @@ export default class Grid extends GestureView {
 
 		// create FxSystem
 		this.fxSystem = new FxSystem({
-			superview: this
+			parent: this
 		});
 
 		// set listeners for input events

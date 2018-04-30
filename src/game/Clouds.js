@@ -20,7 +20,7 @@ export default class Clouds extends View {
 		// creating a ImageView per cloud image and animate
 		for (var i = 0; i < cloud_images.length; i++) {
 			var cloud = new ImageView({
-				superview: this,
+				parent: this,
 				image: cloud_images[i],
 				autoSize: true
 			});

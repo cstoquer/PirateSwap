@@ -12,7 +12,7 @@ export default class Boat extends View {
     super(opts);
 
 		var image = new ImageView({
-			superview: this,
+			parent: this,
 			image: 'resources/images/boat.png',
 			autoSize: true
 		});

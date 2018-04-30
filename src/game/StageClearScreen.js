@@ -34,13 +34,13 @@ export default class StageClearScreen extends View {
 	build () {
 		// particles
 		this.particleEngine = new ParticleEngine({
-			superview: this,
+			parent: this,
 			centerAnchor: true
 		});
 
 		// title
 		new TextView({
-			superview: this,
+			parent: this,
 			text: 'STAGE CLEAR!',
 			color: '#c44d29',
 			x: 0,
@@ -59,7 +59,7 @@ export default class StageClearScreen extends View {
 
 		// button
 		new Button({
-			superview: this,
+			parent: this,
 			title: 'NEXT',
 			on: {
 				down: bind(this, 'onButtonPress', ButtonView.states.UP)

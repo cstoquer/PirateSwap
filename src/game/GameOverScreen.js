@@ -18,7 +18,7 @@ export default class GameOverScreen extends View {
 
 	build () {
 		new TextView({
-			superview: this,
+			parent: this,
 			text: 'GAME OVER',
 			color: '#c44d29',
 			x: 0,
@@ -37,7 +37,7 @@ export default class GameOverScreen extends View {
 
 		// button
 		new Button({
-			superview: this,
+			parent: this,
 			title: 'RETRY',
 			on: {
 				down: () => { this.onButtonPress(ButtonView.states.UP); }

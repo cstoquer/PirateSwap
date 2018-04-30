@@ -33,14 +33,14 @@ export default class GameScreen extends View {
 	build () {
 		// clouds animation
 		new Clouds({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 100
 		});
 
 		// sea
 		new View({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 100,
 			width: 320,
@@ -50,34 +50,34 @@ export default class GameScreen extends View {
 
 		// boat animation
 		new Boat({
-			superview: this,
+			parent: this,
 			x: 10,
 			y: 10
 		});
 
 		// grid background
 		this.island = new Island({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 150
 		});
 
 		// grid
 		this.grid = new Grid({
-			superview: this,
+			parent: this,
 			x: 32,
 			y: 150 + 32
 		});
 
 		// hud elements
 		this.moneyScore = new Money({
-			superview: this,
+			parent: this,
 			x: 146,
 			y: 20
 		});
 
 		this.staminaGauge = new Gauge({
-			superview: this,
+			parent: this,
 			x: 150,
 			y: 86
 		});

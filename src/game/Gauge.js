@@ -23,7 +23,7 @@ export default class Gauge extends ImageView {
 		// var imgWidth = PELLET_IMAGE.getOrigWidth();
 		for (var i = 0; i < 10; i++) {
 			var pellet = new ImageView({
-				superview: this,
+				parent: this,
 				image: PELLET_IMAGE,
 				autoSize: true,
 				x: 10 + i * 14,

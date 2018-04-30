@@ -13,7 +13,7 @@ export default class FxSystem extends View {
 			ctor: Fx,
 			initCount: 20,
 			initOpts: {
-				superview: this
+				parent: this
 			}
 		});
 
