@@ -1,9 +1,10 @@
-import ui.widget.ButtonView as ButtonView;
+import { merge } from 'base';
+import ButtonView from 'ui/widget/ButtonView';
 
 /* Pre-styled button
  */
-exports = Class(ButtonView, function Button(supr) {
-	this.init = function (opts) {
+export default class Button extends ButtonView {
+	constructor (opts) {
 		opts = merge(opts, {
 			width: 200,
 			height: 48,
@@ -33,6 +34,6 @@ exports = Class(ButtonView, function Button(supr) {
 			}
 		});
 
-		supr(this, 'init', [opts]);
-	};	
-});
+    super(opts);
+	}
+}

@@ -1,17 +1,60 @@
-import device;
-import ui.StackView as StackView;
-import src.TitleScreen as TitleScreen;
-import src.GameScreen as GameScreen;
-import src.StageClearScreen as StageClearScreen;
-import src.GameOverScreen as GameOverScreen;
-import src.soundController as soundController;
+// NOTE: webpackGameEntrypoint must go at top of file!
+import webpackGameEntrypoint from 'devkitCore/clientapi/webpackGameEntrypoint';
 
-exports = Class(GC.Application, function (supr) {
+import device from 'device';
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import sounds from 'src/lib/sounds';
 
-	/* Run after the engine is created and the scene graph is in
+import StackView from 'ui/StackView';
+import TitleScreen from 'src/TitleScreen';
+import GameScreen from 'src/GameScreen';
+import StageClearScreen from 'src/StageClearScreen';
+import GameOverScreen from 'src/GameOverScreen';
+
+
+
+export default class Application extends View {
+  constructor (opts) {
+    super(opts);
+
+    // this.time = 0;
+
+    this._resize();
+    this._startGame();
+
+    device.screen.on('Resize', () => this._resize());
+  }
+
+  /* Run after the engine is created and the scene graph is in
 	 * place, but before the resources have been loaded.
 	 */
-	this.initUI = function () {
+	initUI () {
+    // ...
+  }
+
+  /* Executed after the asset resources have been loaded.
+	 * If there is a splash screen, it's removed.
+	 */
+	launchUI () {
+    sounds.playSong('pirateSea');
+	}
+
+  _resize () {
+    var screen = device.screen;
+    var screenWidth = screen.width;
+    var screenHeight = screen.height;
+
+    this.style.width = screenWidth;
+    this.style.height = screenHeight;
+  }
+
+  // _tick (dt) {
+  //   // called every frame by the engine
+  //   this.time += dt;
+  // }
+
+  _startGame () {
 		var titleScreen = new TitleScreen();
 		var gameScreen = new GameScreen();
 		var stageClearScreen = new StageClearScreen();
@@ -31,41 +74,34 @@ exports = Class(GC.Application, function (supr) {
 
 		rootView.push(titleScreen);
 
-		var sound = soundController.getSound();
-
 		titleScreen.on('titlescreen:start', function () {
-			sound.play('dubesque');
+			sounds.playSong('dubesque');
 			rootView.push(gameScreen, true);
 			gameScreen.emit('app:start');
 		});
 
 		gameScreen.on('game:stageClear', function () {
-			sound.play('win');
+			sounds.playSong('win');
 			rootView.push(stageClearScreen, true);
 		});
 
 		gameScreen.on('game:gameOver', function () {
-			sound.play('loose');
+			sounds.playSong('loose');
 			rootView.push(gameOverScreen, true);
 		});
 
 		stageClearScreen.on('stageClearScreen:go', function () {
 			rootView.pop(true);
-			sound.play('dubesque');
+			sounds.playSong('dubesque');
 			gameScreen.emit('app:nextStage');
 		});
 
 		gameOverScreen.on('gameOverScreen:go', function () {
 			rootView.pop(true);
-			sound.play('dubesque');
+			sounds.playSong('dubesque');
 			gameScreen.emit('app:start');
 		});
-	};
+	}
+}
 
-	/* Executed after the asset resources have been loaded.
-	 * If there is a splash screen, it's removed.
-	 */
-	this.launchUI = function () {
-		soundController.getSound().play('pirateSea');
-	};
-});
+webpackGameEntrypoint(Application);

@@ -1,15 +1,15 @@
-import ui.View as View;
-import ui.ImageView as ImageView;
-import animate;
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import animate from 'animate';
 
-var horizontal_derivation = 5,
-		vertical_derivation = 6;
+const HORIZONTAL_DERIVATION = 5;
+const VERTICAL_DERIVATION = 6;
 
 /* Simple animation of the boat floating over the sea.
  */
-exports = Class(View, function Boat(supr) {
-	this.init = function (opts) {
-		supr(this, 'init', [opts]);
+export default class Boat extends View {
+  constructor (opts) {
+    super(opts);
 
 		var image = new ImageView({
 			superview: this,
@@ -22,21 +22,21 @@ exports = Class(View, function Boat(supr) {
 		 */
 		animateHorizontally.call(this, this.style.x);
 		animateVertically.call(image, image.style.y);
-	};
-});
+	}
+}
 
 function animateHorizontally (startPosition) {
 	animate(this).clear()
-		.now({x: startPosition - horizontal_derivation}, 100, animate.linear)
-		.then({x: startPosition + horizontal_derivation}, 6340, animate.easeInOut)
-		.then({x: startPosition - horizontal_derivation}, 6340, animate.easeInOut)
+		.now({x: startPosition - HORIZONTAL_DERIVATION}, 100, animate.linear)
+		.then({x: startPosition + HORIZONTAL_DERIVATION}, 6340, animate.easeInOut)
+		.then({x: startPosition - HORIZONTAL_DERIVATION}, 6340, animate.easeInOut)
 		.then(animateHorizontally.bind(this, startPosition));
 }
 
 function animateVertically (startPosition) {
 	animate(this).clear()
-		.now({y: startPosition - vertical_derivation}, 100, animate.linear)
-		.then({y: startPosition + vertical_derivation}, 2000, animate.easeInOut)
-		.then({y: startPosition - vertical_derivation}, 2000, animate.easeInOut)
+		.now({y: startPosition - VERTICAL_DERIVATION}, 100, animate.linear)
+		.then({y: startPosition + VERTICAL_DERIVATION}, 2000, animate.easeInOut)
+		.then({y: startPosition - VERTICAL_DERIVATION}, 2000, animate.easeInOut)
 		.then(animateVertically.bind(this, startPosition));
 }

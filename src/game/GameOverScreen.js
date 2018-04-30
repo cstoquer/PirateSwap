@@ -1,21 +1,22 @@
-import ui.View as View;
-import ui.TextView as TextView;
-import ui.widget.ButtonView as ButtonView;
-import src.Button as Button;
+import View from 'ui/View';
+import TextView from 'ui/TextView';
+import ButtonView from 'ui/widget/ButtonView';
+import Button from 'src/game/Button';
 
-exports = Class(View, function GameOverScreen(supr) {
-	this.init = function (opts) {
+export default class GameOverScreen extends View {
+
+	init (opts) {
 		opts = merge(opts, {
 			x: 0,
 			y: 0
 		});
 
-		supr(this, 'init', [opts]);
+		super.init(opts);
 
 		this.build();
 	};
 
-	this.build = function() {
+	build () {
 		new TextView({
 			superview: this,
 			text: 'GAME OVER',
@@ -39,12 +40,12 @@ exports = Class(View, function GameOverScreen(supr) {
 			superview: this,
 			title: 'RETRY',
 			on: {
-				down: bind(this, 'onButtonPress', ButtonView.states.UP)
+				down: () => { this.onButtonPress(ButtonView.states.UP); }
 			}
 		});
 	};
 
-	this.onButtonPress = function () {
+	onButtonPress () {
 		this.emit('gameOverScreen:go');
-	};
-});
+	}
+}

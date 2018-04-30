@@ -1,7 +1,7 @@
-import ui.View as View;
-import ui.ImageView as ImageView;
-import math.util as util;
-import animate;
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import util from 'math/util';
+import animate from 'animate';
 
 var cloud_images = [
 	'resources/images/cloud1.png',
@@ -13,9 +13,9 @@ var cloud_images = [
 
 /* Animate few lovely clouds in the background on the horizon
  */
-exports = Class(View, function Clouds(supr) {
-	this.init = function (opts) {
-		supr(this, 'init', [opts]);
+export default class Clouds extends View {
+	constructor (opts) {
+    super(opts);
 
 		// creating a ImageView per cloud image and animate
 		for (var i = 0; i < cloud_images.length; i++) {
@@ -33,8 +33,8 @@ exports = Class(View, function Clouds(supr) {
 
 			continuousAnimate.call(cloud);
 		}
-	};
-});
+	}
+}
 
 function continuousAnimate() {
 	// make cloud move from left to right past the borders

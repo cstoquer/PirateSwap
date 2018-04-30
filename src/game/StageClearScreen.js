@@ -1,12 +1,12 @@
-import math.util as util;
-import ui.View as View;
-import ui.TextView as TextView;
-import ui.widget.ButtonView as ButtonView;
-import ui.ParticleEngine as ParticleEngine;
-import src.Button as Button;
+import util from 'math.util';
+import View from 'ui.View';
+import TextView from 'ui.TextView';
+import ButtonView from 'ui.widget.ButtonView';
+import ParticleEngine from 'ui.ParticleEngine';
+import Button from 'src.Button';
 
-var max_particles = 160;
-var gem_images = [
+var MAX_PARTICLES = 160;
+var GEM_IMAGES = [
 	'resources/images/gem_diamond.png',
 	'resources/images/gem_emerald.png',
 	'resources/images/gem_lazuli.png',
@@ -15,19 +15,23 @@ var gem_images = [
 	'resources/images/gem_ruby.png'
 ];
 
-exports = Class(View, function StageClearScreen(supr) {
-	this.init = function (opts) {
+export default class StageClearScreen extends View {
+  constructor (opts) {
+		super(opts);
+	}
+
+	init (opts) {
 		opts = merge(opts, {
 			x: 0,
 			y: 0
 		});
 
-		supr(this, 'init', [opts]);
+		super.init(opts);
 
 		this.build();
-	};
+	}
 
-	this.build = function() {
+	build () {
 		// particles
 		this.particleEngine = new ParticleEngine({
 			superview: this,
@@ -63,15 +67,15 @@ exports = Class(View, function StageClearScreen(supr) {
 		});
 
 		this.createParticles();
-	};
+	}
 
-	this.onButtonPress = function () {
+	onButtonPress () {
 		this.emit('stageClearScreen:go');
-	};
+	}
 
-	this.createParticles = function () {
-		var particleObjects = this.particleEngine.obtainParticleArray(max_particles);
-		for (var i = 0; i < max_particles; i++) {
+	createParticles () {
+		var particleObjects = this.particleEngine.obtainParticleArray(MAX_PARTICLES);
+		for (var i = 0; i < MAX_PARTICLES; i++) {
 			var pObj = particleObjects[i];
 			pObj.x = util.random(-30, 320);
 			pObj.y = util.random(-50, 400);
@@ -84,7 +88,7 @@ exports = Class(View, function StageClearScreen(supr) {
 			pObj.width = 50;
 			pObj.height = 50;
 			pObj.ttl = Infinity;
-			pObj.image = gem_images[util.random(0, 6)];
+			pObj.image = GEM_IMAGES[util.random(0, 6)];
 			pObj.triggers.push({
 				property: 'y',
 				value: 600,
@@ -98,9 +102,9 @@ exports = Class(View, function StageClearScreen(supr) {
 			});
 		}
 		this.particleEngine.emitParticles(particleObjects);
-	};
+	}
 
-	this.tick = function (dt) {
+	tick (dt) {
 		this.particleEngine.runTick(dt);
-	};
-});
+	}
+}

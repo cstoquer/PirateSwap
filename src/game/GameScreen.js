@@ -1,34 +1,36 @@
-import math.util as util;
-import ui.View as View;
-import ui.ImageView as ImageView;
-import src.Boat as Boat;
-import src.Clouds as Clouds;
-import src.Gauge as Gauge;
-import src.Money as Money;
-import src.Island as Island;
-import src.Grid as Grid;
-import src.soundController as soundController;
+import utils from 'math/util';
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import GestureView from 'ui/GestureView';
+import Boat from 'src/game/Boat';
+import Clouds from 'src/game/Clouds';
+import Gauge from 'src/game/Gauge';
+import Money from 'src/game/Money';
+import Island from 'src/game/Island';
+import Grid from 'src/game/Grid';
+import soundController from 'src/game/soundController';
+import stagesData from 'src/conf/stages.json';
 
-import ui.GestureView as GestureView;
 
-var stagesData = JSON.parse(CACHE['resources/data/stages.json']);
+export default class GameScreen extends View {
+  constructor (opts) {
+    super(opts);
+		this.stageId = 0;
+		this.targetScore = 0;
+	}
 
-exports = Class(View, function GameScreen(supr) {
-	this.stageId = 0;
-	this.targetScore = 0;
-
-	this.init = function (opts) {
+	init (opts) {
 		opts = merge(opts, {
 			x: 0,
 			y: 0
 		});
 
-		supr(this, 'init', [opts]);
+		super.init(opts);
 
 		this.build();
-	};
+	}
 
-	this.build = function() {
+	build () {
 		// clouds animation
 		new Clouds({
 			superview: this,
@@ -86,8 +88,8 @@ exports = Class(View, function GameScreen(supr) {
 		this.grid.on('grid:clearGem', bind(this, onClearGem));
 		this.grid.on('grid:gemSwapped', bind(this, onSwapCells));
 		this.grid.on('grid:turnEnd', bind(this, onTurnEnd));
-	};
-});
+	}
+}
 
 /* Player restart a fresh new game: go back to first stage and reset UI.
  */

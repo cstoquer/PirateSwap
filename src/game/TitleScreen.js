@@ -1,24 +1,26 @@
-import ui.View as View;
-import ui.ImageView as ImageView;
-import ui.TextView as TextView;
-import ui.widget.ButtonView as ButtonView;
-import src.Button as Button;
-import src.Boat as Boat;
-import src.Clouds as Clouds;
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import TextView from 'ui/TextView';
+import ButtonView from 'ui/widget/ButtonView';
+import Button from 'src/game/Button';
+import Boat from 'src/game/Boat';
+import Clouds from 'src/game/Clouds';
 
-exports = Class(View, function TitleScreen(supr) {
-	this.init = function (opts) {
+
+export default class TitleScreen extends View {
+
+	init (opts) {
 		opts = merge(opts, {
 			x: 0,
 			y: 0
 		});
 
-		supr(this, 'init', [opts]);
+		super.init(opts);
 
 		this.build();
-	};
+	}
 
-	this.build = function() {
+	build () {
 		// clouds animation
 		new Clouds({
 			superview: this,
@@ -71,9 +73,9 @@ exports = Class(View, function TitleScreen(supr) {
 				down: bind(this, 'startGame', ButtonView.states.UP)
 			}
 		});
-	};
+	}
 
-	this.startGame = function () {
+	startGame () {
 		this.emit('titlescreen:start');
-	};
-});
+	}
+}

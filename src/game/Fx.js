@@ -1,7 +1,7 @@
-import animate;
-import ui.View as View;
-import ui.SpriteView as SpriteView;
-import ui.ParticleEngine as ParticleEngine;
+import animate from 'animate';
+import View from 'ui/View';
+import SpriteView from 'ui/SpriteView';
+import ParticleEngine from 'ui/ParticleEngine';
 
 var particles_images = [
 	'resources/images/smoke_big.png',
@@ -14,9 +14,9 @@ var particles_images = [
 
 /* Graphic special effect for gem clear.
  */
-exports = Class(View, function Fx(supr) {
-	this.init = function (opts) {
-		supr(this, 'init', [opts]);
+export default class Fx extends View {
+	constructor (opts) {
+    super(opts);
 
 		// create particle engine and particles
 		this.pEngine = new ParticleEngine({
@@ -32,9 +32,9 @@ exports = Class(View, function Fx(supr) {
 			url: 'resources/images/fx',
 			defaultAnimation: 'idle'
 		});
-	};
+	}
 
-	this.play = function () {
+	play () {
 		this.sprite.startAnimation('explosion');
 
 		var particleObjects = this.pEngine.obtainParticleArray(particles_images.length);
@@ -54,9 +54,9 @@ exports = Class(View, function Fx(supr) {
 		this.pEngine.emitParticles(particleObjects);
 
 		return this;
-	};
+	}
 
-	this.tickParticle = function (dt) {
+	tickParticle (dt) {
 		this.pEngine.runTick(dt)
-	};
-});
+	}
+}
