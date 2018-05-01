@@ -32,6 +32,7 @@ class SingleTextBuffer {
 
 export default class FixedTextView extends TextView {
   constructor (opts) {
+    opts.buffer = true;
     super(opts);
     this.textBuffer = new SingleTextBuffer();
   }
@@ -46,22 +47,22 @@ export default class FixedTextView extends TextView {
     var width = offsetRect.width;
     var height = offsetRect.height;
 
-    if (width && height) {
-      var fontBuffer = this.textBuffer.build(width, height);
-      var fontBufferCtx = fontBuffer._ctx;
-      var words = this._textFlow.getWords();
+    if (!width || !height) return;
 
-      this._opts.lineCount = words[words.length - 1].line;
-      offsetRect.text = this._opts.text;
-      offsetRect.textView = this;
+    var fontBuffer = this.textBuffer.build(width, height);
+    var fontBufferCtx = fontBuffer._ctx;
+    var words = this._textFlow.getWords();
 
-      if (this._cacheUpdate) {
-        fontBufferCtx.clearRect(0, 0, width, height);
-        this._renderToCtx(fontBufferCtx, -offsetRect.x, -offsetRect.y);
-        fontBuffer._canvas.__needsUpload = true;
-      }
+    this._opts.lineCount = words[words.length - 1].line;
+    offsetRect.text = this._opts.text;
+    offsetRect.textView = this;
 
-      ctx.drawImage(fontBuffer._canvas, 0, 0, width, height, offsetRect.x, offsetRect.y, width, height);
+    if (this._cacheUpdate) {
+      fontBufferCtx.clearRect(0, 0, width, height);
+      this._renderToCtx(fontBufferCtx, -offsetRect.x, -offsetRect.y);
+      fontBuffer._canvas.__needsUpload = true;
     }
+
+    ctx.drawImage(fontBuffer._canvas, 0, 0, width, height, offsetRect.x, offsetRect.y, width, height);
   }
 }

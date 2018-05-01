@@ -1,5 +1,6 @@
 import { merge } from 'base';
 import ButtonView from 'ui/widget/ButtonView';
+import FixedTextView from 'src/lib/FixedTextView';
 
 /* Pre-styled button
  */
@@ -20,20 +21,29 @@ export default class Button extends ButtonView {
 			},
 			destSlices: {
 				horizontal: {left: 32, right: 32}
-			},
-			text: {
-				color: '#c44d29',
-				fontWeight: 'bold',
-				strokeWidth: 8,
-				strokeColor: '#fff275',
-				fontFamily: 'rounded-x-mplus-1c-heavy',
-				size: 30,
-				padding: [0, 0, 15, 0],
-				autoFontSize: false,
-				autoSize: false
 			}
 		});
 
-    super(opts);
+		super(opts);
+
+		// title
+		this.titleText = new FixedTextView({
+			parent: this,
+			text: opts.title,
+			color: '#c44d29',
+			x: 0,
+			y: -10,
+			width: 200,
+			height: 48,
+			fontWeight: 'bold',
+			fontFamily: 'rounded-x-mplus-1c-heavy',
+			horizontalAlign: 'center',
+			verticalAlign: 'middle',
+			strokeWidth: 8,
+			strokeColor: '#fff275',
+			size: 30,
+			autoFontSize: false,
+			autoSize: false
+		});
 	}
 }

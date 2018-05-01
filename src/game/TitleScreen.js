@@ -55,7 +55,6 @@ export default class TitleScreen extends View {
 			autoSize: false
 		});
 
-
 		// start button
 		new Button({
 			parent: this,

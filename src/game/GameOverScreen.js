@@ -1,5 +1,5 @@
 import View from 'ui/View';
-import TextView from 'ui/TextView';
+import FixedTextView from 'src/lib/FixedTextView';
 import ButtonView from 'ui/widget/ButtonView';
 import Button from 'src/game/Button';
 
@@ -8,7 +8,7 @@ export default class GameOverScreen extends View {
 	constructor (opts) {
 		super(opts);
 
-		new TextView({
+		new FixedTextView({
 			parent: this,
 			text: 'GAME OVER',
 			color: '#c44d29',

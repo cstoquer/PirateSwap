@@ -1,6 +1,6 @@
 import util from 'math/util';
 import View from 'ui/View';
-import TextView from 'ui/TextView';
+import FixedTextView from 'src/lib/FixedTextView';
 import ButtonView from 'ui/widget/ButtonView';
 import ParticleEngine from 'ui/ParticleEngine';
 import Button from 'src/game/Button';
@@ -26,7 +26,7 @@ export default class StageClearScreen extends View {
 		});
 
 		// title
-		new TextView({
+		new FixedTextView({
 			parent: this,
 			text: 'STAGE CLEAR!',
 			color: '#c44d29',
