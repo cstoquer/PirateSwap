@@ -1,9 +1,9 @@
-import util from 'math.util';
-import View from 'ui.View';
-import TextView from 'ui.TextView';
-import ButtonView from 'ui.widget.ButtonView';
-import ParticleEngine from 'ui.ParticleEngine';
-import Button from 'src.Button';
+import util from 'math/util';
+import View from 'ui/View';
+import TextView from 'ui/TextView';
+import ButtonView from 'ui/widget/ButtonView';
+import ParticleEngine from 'ui/ParticleEngine';
+import Button from 'src/game/Button';
 
 var MAX_PARTICLES = 160;
 var GEM_IMAGES = [
@@ -18,20 +18,7 @@ var GEM_IMAGES = [
 export default class StageClearScreen extends View {
   constructor (opts) {
 		super(opts);
-	}
 
-	init (opts) {
-		opts = merge(opts, {
-			x: 0,
-			y: 0
-		});
-
-		super.init(opts);
-
-		this.build();
-	}
-
-	build () {
 		// particles
 		this.particleEngine = new ParticleEngine({
 			parent: this,
@@ -62,7 +49,7 @@ export default class StageClearScreen extends View {
 			parent: this,
 			title: 'NEXT',
 			on: {
-				down: bind(this, 'onButtonPress', ButtonView.states.UP)
+				down: this.onButtonPress.bind(this, ButtonView.states.UP)
 			}
 		});
 

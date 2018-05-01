@@ -1,7 +1,7 @@
-import View from 'ui.View';
-import ImageView from 'ui.ImageView';
-import ScoreView from 'ui.ScoreView';
-import util from 'math.util';
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import ScoreView from 'ui/ScoreView';
+import util from 'math/util';
 
 var characterData = {};
 for (var i = 0; i <= 9; i++) {
@@ -14,10 +14,6 @@ export default class Money extends View {
   constructor (opts) {
     super(opts);
 		this._value = 0;
-	}
-
-	init (opts) {
-		super.init(opts);
 
 		new ImageView({
 			parent: this,

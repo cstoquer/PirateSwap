@@ -1,6 +1,6 @@
 {
-  "name": "pirate_swap",
-  "version": "2.0.0",
+  "name": "game_name",
+  "version": "0.0.1",
   "manifest": {
     "maxTick": 50,
     "android": {
@@ -18,7 +18,7 @@
         "preserveDrawingBuffer": false
       }
     },
-    "title": "Pirate Swap"
+    "title": "Tsum Tsum"
   },
   "scripts": {
     "postinstall": "git submodule update --init --recursive && (cd frontend && npm install)",

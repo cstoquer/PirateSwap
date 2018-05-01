@@ -7,6 +7,7 @@ import Cell from 'src/game/Cell';
 import Gem from 'src/game/Gem';
 import GemSpawner from 'src/game/GemSpawner';
 import FxSystem from 'src/game/FxSystem';
+import { merge } from 'base';
 
 
 const GRID_WIDTH = 8;
@@ -19,13 +20,7 @@ const BOTTLE_ITME_TYPE = 7;
  */
 export default class Grid extends GestureView {
   constructor (opts) {
-		super(opts);
 
-		this._isInteractionLocked = false;
-		this._lastMove = null;
-	}
-
-	init (opts) {
 		opts = merge(opts, {
 			// backgroundColor: 'rgba(255, 255, 0, 0.2)',
 			width: TILE_SIZE * GRID_WIDTH,
@@ -34,14 +29,12 @@ export default class Grid extends GestureView {
 			swipeTime: 1000
 		});
 
-		super.init(opts);
+		super(opts);
 
-		this.build();
-	}
+		this._isInteractionLocked = false;
+		this._lastMove = null;
 
-	/* Build the grid
-	 */
-	build () {
+
 		// gem spawner
 		this.gemSpawner = new GemSpawner();
 
@@ -158,14 +151,14 @@ function swapCells(source, target) {
 
 	this.emit('grid:gemSwapped');
 
-	swapAnimation.call(this, source, target, bind(this, function () {
+	swapAnimation.call(this, source, target, () => {
 		var foundMatch = checkForMatch.call(this, 1);
 		// NOTA: following code has been commented out because game felt more fun without.
 		// if (!foundMatch) {
 		// 	// cancel the last move if no match occured from it
 		// 	cancelLastMove.call(this);
 		// }
-	}));
+	});
 }
 
 /* Create and start the swap animation, then call provided callback once it finishes
@@ -197,9 +190,9 @@ function cancelLastMove() {
 	var source = this._lastMove.source;
 	var target = this._lastMove.target;
 
-	swapAnimation.call(this, source, target, bind(this, function () {
+	swapAnimation.call(this, source, target, () => {
 		this._isInteractionLocked = false;
-	}));
+	});
 }
 
 /* Check the grid for matching cells and mark them as `matched`.
@@ -352,7 +345,7 @@ function makeGemFall(iteration) {
 	// wait for animation to finish if any, and iterate to the next step
 	if (hasFallen) {
 		// wait for all fall animations to finish before next step
-		animate.getGroup('gemFallAnimation').once('Finish', bind(this, makeGemFall, iteration));
+		animate.getGroup('gemFallAnimation').once('Finish', makeGemFall.bind(this, iteration));
 	} else {
 		// iterate on checkForMatch
 		iteration += 1;

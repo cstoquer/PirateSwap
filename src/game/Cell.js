@@ -12,10 +12,6 @@ export default class Cell extends Emitter {
     super(opts);
 		this.matched = false; // set to true when cell has been detected to be in a match
 		this.isEmpty = false; // true if this is not a ground tile, and / or can not holds item.
-	}
-
-	init (opts) {
-		super.init();
 
 		this.i = opts.i; // horizontal position in the grid
 		this.j = opts.j; // vertical position in the grid

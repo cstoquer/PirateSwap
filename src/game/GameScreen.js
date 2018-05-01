@@ -1,4 +1,4 @@
-import utils from 'math/util';
+import util from 'math/util';
 import View from 'ui/View';
 import ImageView from 'ui/ImageView';
 import GestureView from 'ui/GestureView';
@@ -8,8 +8,8 @@ import Gauge from 'src/game/Gauge';
 import Money from 'src/game/Money';
 import Island from 'src/game/Island';
 import Grid from 'src/game/Grid';
-import soundController from 'src/game/soundController';
 import stagesData from 'src/conf/stages.json';
+import sounds from 'src/lib/sounds';
 
 
 export default class GameScreen extends View {
@@ -17,20 +17,7 @@ export default class GameScreen extends View {
     super(opts);
 		this.stageId = 0;
 		this.targetScore = 0;
-	}
 
-	init (opts) {
-		opts = merge(opts, {
-			x: 0,
-			y: 0
-		});
-
-		super.init(opts);
-
-		this.build();
-	}
-
-	build () {
 		// clouds animation
 		new Clouds({
 			parent: this,
@@ -85,9 +72,9 @@ export default class GameScreen extends View {
 		// set event listeners
 		this.on('app:start', resetGame.bind(this));
 		this.on('app:nextStage', goToNextStage.bind(this));
-		this.grid.on('grid:clearGem', bind(this, onClearGem));
-		this.grid.on('grid:gemSwapped', bind(this, onSwapCells));
-		this.grid.on('grid:turnEnd', bind(this, onTurnEnd));
+		this.grid.on('grid:clearGem', onClearGem.bind(this));
+		this.grid.on('grid:gemSwapped', onSwapCells.bind(this));
+		this.grid.on('grid:turnEnd', onTurnEnd.bind(this));
 	}
 }
 
@@ -149,11 +136,10 @@ function onClearGem(match, bottle, iteration) {
 	this.moneyScore.addValue(points);
 
 	// sound effects
-	var sound = soundController.getSound();
-	sound.play('explode');
+	sounds.playSound('explode');
 	if (iteration > 1) {
 		var comboId = util.clip(iteration, 2, 6);
-		sound.play('combo_x' + comboId);
+		sounds.playSound('combo_x' + comboId);
 	}
 }
 
@@ -164,8 +150,7 @@ function onSwapCells() {
 	this.staminaGauge.addValue(-1);
 
 	// sound effect
-	var sound = soundController.getSound();
-	sound.play('swap');
+	sounds.playSound('swap');
 }
 
 /* Called when all gems have been cleared and fall, and grid is in a stable state
@@ -180,6 +165,6 @@ function onTurnEnd() {
 		this.emit('game:gameOver');
 	} else if (stamina <= 3) {
 		// play a warning sound if stamina runs low
-		soundController.getSound().play('warning');
+		sounds.playSound('warning');
 	}
 }

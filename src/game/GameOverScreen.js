@@ -5,18 +5,9 @@ import Button from 'src/game/Button';
 
 export default class GameOverScreen extends View {
 
-	init (opts) {
-		opts = merge(opts, {
-			x: 0,
-			y: 0
-		});
+	constructor (opts) {
+		super(opts);
 
-		super.init(opts);
-
-		this.build();
-	};
-
-	build () {
 		new TextView({
 			parent: this,
 			text: 'GAME OVER',

@@ -7,10 +7,10 @@ import ImageView from 'ui/ImageView';
 import sounds from 'src/lib/sounds';
 
 import StackView from 'ui/StackView';
-import TitleScreen from 'src/TitleScreen';
-import GameScreen from 'src/GameScreen';
-import StageClearScreen from 'src/StageClearScreen';
-import GameOverScreen from 'src/GameOverScreen';
+import TitleScreen from 'src/game/TitleScreen';
+import GameScreen from 'src/game/GameScreen';
+import StageClearScreen from 'src/game/StageClearScreen';
+import GameOverScreen from 'src/game/GameOverScreen';
 
 
 
@@ -25,20 +25,6 @@ export default class Application extends View {
 
     device.screen.on('Resize', () => this._resize());
   }
-
-  /* Run after the engine is created and the scene graph is in
-	 * place, but before the resources have been loaded.
-	 */
-	initUI () {
-    // ...
-  }
-
-  /* Executed after the asset resources have been loaded.
-	 * If there is a splash screen, it's removed.
-	 */
-	launchUI () {
-    sounds.playSong('pirateSea');
-	}
 
   _resize () {
     var screen = device.screen;
@@ -55,12 +41,7 @@ export default class Application extends View {
   // }
 
   _startGame () {
-		var titleScreen = new TitleScreen();
-		var gameScreen = new GameScreen();
-		var stageClearScreen = new StageClearScreen();
-		var gameOverScreen = new GameOverScreen();
-
-		this.view.style.backgroundColor = '#6eeeff';
+		this.style.backgroundColor = '#6eeeff';
 
 		var rootView = new StackView({
 			parent: this,
@@ -72,31 +53,39 @@ export default class Application extends View {
 			scale: device.width / 320
 		});
 
-		rootView.push(titleScreen);
+		var titleScreen = new TitleScreen();
+		var gameScreen = new GameScreen();
+		var stageClearScreen = new StageClearScreen();
+		var gameOverScreen = new GameOverScreen();
 
-		titleScreen.on('titlescreen:start', function () {
+
+		rootView.push(titleScreen);
+		sounds.playSong('pirateSea');
+
+
+		titleScreen.on('titlescreen:start', () => {
 			sounds.playSong('dubesque');
 			rootView.push(gameScreen, true);
 			gameScreen.emit('app:start');
 		});
 
-		gameScreen.on('game:stageClear', function () {
+		gameScreen.on('game:stageClear', () => {
 			sounds.playSong('win');
 			rootView.push(stageClearScreen, true);
 		});
 
-		gameScreen.on('game:gameOver', function () {
+		gameScreen.on('game:gameOver', () => {
 			sounds.playSong('loose');
 			rootView.push(gameOverScreen, true);
 		});
 
-		stageClearScreen.on('stageClearScreen:go', function () {
+		stageClearScreen.on('stageClearScreen:go', () => {
 			rootView.pop(true);
 			sounds.playSong('dubesque');
 			gameScreen.emit('app:nextStage');
 		});
 
-		gameOverScreen.on('gameOverScreen:go', function () {
+		gameOverScreen.on('gameOverScreen:go', () => {
 			rootView.pop(true);
 			sounds.playSong('dubesque');
 			gameScreen.emit('app:start');

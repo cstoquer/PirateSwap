@@ -9,7 +9,7 @@ const GRID_HEIGHT = 10;
 const TILE_SIZE = 32;
 
 /* Tile images are named island_tile_A to island_tile_M.
- * Let's construct a hash map of all theses images.
+ * We construct a hash map of all theses images.
  */
 var tileIds = 'ABCDEFGHIJKLM';
 var tileImages = {};
@@ -37,12 +37,9 @@ var borderTileMap = {
  */
 export default class Island extends View {
   constructor (opts) {
-    super(opts);
-		this.stageData = null;
-	}
+		super(opts);
 
-	init (opts) {
-		super.init(opts);
+		this.stageData = null;
 
 		// create a 2-dimensional array of ImageView
 		this._tiles = [];

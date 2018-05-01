@@ -1,6 +1,7 @@
 import animate from 'animate';
 import ImageView from 'ui/ImageView';
 import gemImages from 'src/game/gemImages';
+import { merge } from 'base';
 
 
 const TILE_SIZE = 32; // px
@@ -9,18 +10,14 @@ const TILE_SIZE = 32; // px
  */
 export default class Gem extends ImageView {
   constructor (opts) {
-    super(opts);
-		this.type = 0;
-		this.isFalling = false;
-	}
-
-	init (opts) {
 		opts = merge(opts, {
-			image: gemImages[this.type],
+			// image: gemImages[this.type],
 			autoSize: true
 		});
 
-		super.init(opts);
+    super(opts);
+		this.type = 0;
+		this.isFalling = false;
 	}
 
 	/* Set the gem type (gem or object) and update image accordingly
@@ -59,8 +56,8 @@ export default class Gem extends ImageView {
 		return animate(this, 'gemFallAnimation')
 			.now({x: this.style.x, y: this.style.y}, 0)
 			.then({x: cell.i * TILE_SIZE, y: cell.j * TILE_SIZE}, duration, easing)
-			.then(bind(this, function () {
+			.then(() => {
 				this.isFalling = false;
-			}));
+			});
 	}
 }

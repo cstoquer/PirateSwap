@@ -1,23 +1,21 @@
 import ImageView from 'ui/ImageView';
 import Image from 'ui/resource/Image';
 import util from 'math/util';
+import { merge } from 'base';
+
 
 var PELLET_IMAGE = new Image({ url: 'resources/images/gauge_pellet.png' });
 
 export default class Gauge extends ImageView {
   constructor (opts) {
-    super(opts);
-		this._value = 10;
-		this._pellets = [];
-	}
-
-	init (opts) {
 		opts = merge(opts, {
 			image: 'resources/images/gauge_background.png',
 			autoSize: true,
 		});
 
-		super.init(opts);
+    super(opts);
+		this._value = 10;
+		this._pellets = [];
 
 		// creating pellets inside the gauge
 		// var imgWidth = PELLET_IMAGE.getOrigWidth();

@@ -38,7 +38,7 @@ export default class FxSystem extends View {
 		fx.play();
 
 		// set a timeout to clear and remove this fx after 1s
-		window.setTimeout(bind(this, this.removeFx, fx), 1000);
+		window.setTimeout(this.removeFx.bind(this, fx), 1000);
 	}
 
 	/* remove an fx fron the screen

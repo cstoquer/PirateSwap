@@ -1,6 +1,6 @@
 import View from 'ui/View';
 import ImageView from 'ui/ImageView';
-import TextView from 'ui/TextView';
+import FixedTextView from 'src/lib/FixedTextView';
 import ButtonView from 'ui/widget/ButtonView';
 import Button from 'src/game/Button';
 import Boat from 'src/game/Boat';
@@ -9,18 +9,9 @@ import Clouds from 'src/game/Clouds';
 
 export default class TitleScreen extends View {
 
-	init (opts) {
-		opts = merge(opts, {
-			x: 0,
-			y: 0
-		});
+	constructor () {
+		super();
 
-		super.init(opts);
-
-		this.build();
-	}
-
-	build () {
 		// clouds animation
 		new Clouds({
 			parent: this,
@@ -46,7 +37,7 @@ export default class TitleScreen extends View {
 		});
 
 		// title
-		new TextView({
+		new FixedTextView({
 			parent: this,
 			text: 'PIRATE SWAP',
 			color: '#c44d29',
@@ -70,7 +61,7 @@ export default class TitleScreen extends View {
 			parent: this,
 			title: 'START',
 			on: {
-				down: bind(this, 'startGame', ButtonView.states.UP)
+				down: this.startGame.bind(this, ButtonView.states.UP)
 			}
 		});
 	}
