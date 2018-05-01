@@ -3,8 +3,14 @@
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
-# Ignore Mac OS files
-.DS_Store
-
 # ignore build folder
 build
+
+# do not commit frontend folder content
+frontend
+
+# ignore Artifacts files
+.DS_Store
+npm-debug.log
+package-lock.json
+.cache

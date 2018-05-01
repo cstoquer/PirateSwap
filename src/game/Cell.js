@@ -1,4 +1,4 @@
-import event.Emitter as Emitter;
+import Emitter from 'event/Emitter';
 
 /* constants definitions
  */
@@ -7,12 +7,11 @@ var tile_size = 32; // px
 /* Cell in the grid. It alway stays at the same place.
  * A cell can hold an item (e.g. a gem) and is responsible for interactions and logic.
  */
-exports = Class(Emitter, function Cell(supr) {
-	this.matched = false; // set to true when cell has been detected to be in a match
-	this.isEmpty = false; // true if this is not a ground tile, and / or can not holds item.
-
-	this.init = function (opts) {
-		supr(this, 'init');
+export default class Cell extends Emitter {
+  constructor (opts) {
+    super(opts);
+		this.matched = false; // set to true when cell has been detected to be in a match
+		this.isEmpty = false; // true if this is not a ground tile, and / or can not holds item.
 
 		this.i = opts.i; // horizontal position in the grid
 		this.j = opts.j; // vertical position in the grid
@@ -25,13 +24,13 @@ exports = Class(Emitter, function Cell(supr) {
 		});
 
 		this.on('cell:swipe', swipeFromCell.bind(this));
-	};
+	}
 
 	/* initialise cell from stage data
 	 *
 	 * @param {number} tileData - tile data as it comes from stage.json
 	 */
-	this.setData = function (tileData) {
+	setData (tileData) {
 		this.matched = false;
 		this.isEmpty = tileData === 0;
 
@@ -52,23 +51,23 @@ exports = Class(Emitter, function Cell(supr) {
 		}
 
 		this.item.setGemType(tileData);
-	};
+	}
 
 	/* Returns true if this cell's item can be swapped with the cell's item passed in parameter
 	 *
 	 * @param {Cell} cell - the other cell instance to compare itself
 	 */
-	this.canSwapWith = function (cell) {
+	canSwapWith (cell) {
 		if (this.isEmpty || !this.item) return false;
 		// TODO: check if it's a special item that can't be swapped (e.g. rock)
 		return true;
-	};
+	}
 
 	/* Returns true if this cell's item match with the other cell's item passed in parameter
 	 *
 	 * @param {Cell} cell - the other cell instance to compare itself
 	 */
-	this.isMatchable = function (cell) {
+	isMatchable (cell) {
 		if (!this.item || !cell.item) {
 			return false;
 		}
@@ -77,14 +76,14 @@ exports = Class(Emitter, function Cell(supr) {
 		}
 		// TODO: special items (e.g. bomb, chest)
 		return false;
-	};
+	}
 
 	/* Clear marked gem
 	 * Returns the number of gem cleared this way
 	 *
 	 * @param {ui.ViewPool} pool - pool of Gem
 	 */
-	this.clearGem = function (pool) {
+	clearGem (pool) {
 		// TODO: special effects if special gem (e.g. bomb)
 
 		pool.releaseView(this.item);
@@ -95,12 +94,12 @@ exports = Class(Emitter, function Cell(supr) {
 		this.grid.fxSystem.addFx(this.i, this.j);
 
 		return 1;
-	};
+	}
 
 	/* Make item in this cell fall if possible.
 	 * Returns true if an item fall.
 	 */
-	this.makeFallVertically = function () {
+	makeFallVertically () {
 		if (this.isEmpty || !this.item || this.item.isFalling) {
 			return false;
 		}
@@ -127,9 +126,9 @@ exports = Class(Emitter, function Cell(supr) {
 		target.item.createFallAnimationTo(target, distance, false);
 
 		return true;
-	};
+	}
 
-	this.makeFallDiagonally = function () {
+	makeFallDiagonally () {
 		if (this.isEmpty || !this.item || this.item.isFalling) {
 			return false;
 		}
@@ -153,8 +152,8 @@ exports = Class(Emitter, function Cell(supr) {
 		}
 
 		return false;
-	};
-});
+	}
+}
 
 /* User performed a swipe gesture from this cell
  *

@@ -1,34 +1,27 @@
-import ui.View as View;
-import ui.ImageView as ImageView;
-import ui.TextView as TextView;
-import ui.widget.ButtonView as ButtonView;
-import src.Button as Button;
-import src.Boat as Boat;
-import src.Clouds as Clouds;
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import FixedTextView from 'src/lib/FixedTextView';
+import ButtonView from 'ui/widget/ButtonView';
+import Button from 'src/game/Button';
+import Boat from 'src/game/Boat';
+import Clouds from 'src/game/Clouds';
 
-exports = Class(View, function TitleScreen(supr) {
-	this.init = function (opts) {
-		opts = merge(opts, {
-			x: 0,
-			y: 0
-		});
 
-		supr(this, 'init', [opts]);
+export default class TitleScreen extends View {
 
-		this.build();
-	};
+	constructor () {
+		super();
 
-	this.build = function() {
 		// clouds animation
 		new Clouds({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 200
 		});
 
 		// sea
 		new View({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 200,
 			width: 320,
@@ -38,14 +31,14 @@ exports = Class(View, function TitleScreen(supr) {
 
 		// boat animation
 		var boat = new Boat({
-			superview: this,
+			parent: this,
 			x: 100,
 			y: 150
 		});
 
 		// title
-		new TextView({
-			superview: this,
+		new FixedTextView({
+			parent: this,
 			text: 'PIRATE SWAP',
 			color: '#c44d29',
 			x: 0,
@@ -65,15 +58,15 @@ exports = Class(View, function TitleScreen(supr) {
 
 		// start button
 		new Button({
-			superview: this,
+			parent: this,
 			title: 'START',
 			on: {
-				down: bind(this, 'startGame', ButtonView.states.UP)
+				down: this.startGame.bind(this, ButtonView.states.UP)
 			}
 		});
-	};
+	}
 
-	this.startGame = function () {
+	startGame () {
 		this.emit('titlescreen:start');
-	};
-});
+	}
+}

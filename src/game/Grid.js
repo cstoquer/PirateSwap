@@ -1,63 +1,58 @@
-import animate;
-import math.util as util;
-import ui.GestureView as GestureView;
-import ui.View as View;
-import ui.ViewPool as ViewPool;
-import src.Cell as Cell;
-import src.Gem as Gem;
-import src.GemSpawner as GemSpawner;
-import src.FxSystem as FxSystem;
+import animate from 'animate';
+import util from 'math/util';
+import GestureView from 'ui/GestureView';
+import View from 'ui/View';
+import ViewPool from 'ui/ViewPool';
+import Cell from 'src/game/Cell';
+import Gem from 'src/game/Gem';
+import GemSpawner from 'src/game/GemSpawner';
+import FxSystem from 'src/game/FxSystem';
+import { merge } from 'base';
 
 
-/* constants definitions
- */
-var grid_width = 8;
-var grid_height = 8;
-var tile_size = 32; // px
-var bottle_item_type = 7;
+const GRID_WIDTH = 8;
+const GRID_HEIGHT = 8;
+const TILE_SIZE = 32; // px
+const BOTTLE_ITME_TYPE = 7;
 
 /* A 8 by 8 grid of gem.
  * This class contain most of the game logic.
  */
-exports = Class(GestureView, function Grid(supr) {
-	this._isInteractionLocked = false;
-	this._lastMove = null;
+export default class Grid extends GestureView {
+  constructor (opts) {
 
-	this.init = function (opts) {
 		opts = merge(opts, {
 			// backgroundColor: 'rgba(255, 255, 0, 0.2)',
-			width: tile_size * grid_width,
-			height: tile_size * grid_height,
+			width: TILE_SIZE * GRID_WIDTH,
+			height: TILE_SIZE * GRID_HEIGHT,
 			swipeMagnitude: 32,
 			swipeTime: 1000
 		});
 
-		supr(this, 'init', [opts]);
+		super(opts);
 
-		this.build();
-	};
+		this._isInteractionLocked = false;
+		this._lastMove = null;
 
-	/* Build the grid
-	 */
-	this.build = function () {
+
 		// gem spawner
 		this.gemSpawner = new GemSpawner();
 
 		// initialize a ViewPool for Gem
 		this.gemPool = new ViewPool({
 			ctor: Gem,
-			initCount: grid_width * grid_height,
+			initCount: GRID_WIDTH * GRID_HEIGHT,
 			initOpts: {
-				superview: this
+				parent: this
 			}
 		});
 
 		// create a 2-dimensional array of Cell
 		this.cells = [];
-		for (var i = 0; i < grid_width; i++) {
+		for (var i = 0; i < GRID_WIDTH; i++) {
 			var row = [];
 			this.cells.push(row);
-			for (var j = 0; j < grid_height; j++) {
+			for (var j = 0; j < GRID_HEIGHT; j++) {
 				var tile = new Cell({
 					i: i,
 					j: j,
@@ -70,16 +65,16 @@ exports = Class(GestureView, function Grid(supr) {
 
 		// create FxSystem
 		this.fxSystem = new FxSystem({
-			superview: this
+			parent: this
 		});
 
 		// set listeners for input events
 		var selectedCell = null;
 
 		this.on('InputStart', function (event, point) {
-			var i = Math.floor(point.x / tile_size);
-			var j = Math.floor(point.y / tile_size);
-			if (i < 0 || i >= grid_width || j < 0 || j >= grid_height) {
+			var i = Math.floor(point.x / TILE_SIZE);
+			var j = Math.floor(point.y / TILE_SIZE);
+			if (i < 0 || i >= GRID_WIDTH || j < 0 || j >= GRID_HEIGHT) {
 				return;
 			}
 			selectedCell = this.getCell(i, j);
@@ -105,7 +100,7 @@ exports = Class(GestureView, function Grid(supr) {
 
 		// set game logic event listener
 		this.on('grid:swapCells', swapCells.bind(this));
-	};
+	}
 
 	/* Get cell in the grid at coordinate i, j
 	 * If the coordinate is outside the grid, returns null
@@ -113,30 +108,30 @@ exports = Class(GestureView, function Grid(supr) {
 	 * @param {number} i - i coordinate
 	 * @param {number} j - j coordinate
 	 */
-	this.getCell = function (i, j) {
-		if (i < 0 || i >= grid_width || j < 0 || j >= grid_height) {
+	getCell (i, j) {
+		if (i < 0 || i >= GRID_WIDTH || j < 0 || j >= GRID_HEIGHT) {
 			return null;
 		}
 		// TODO: check that cell is not empty
 		return this.cells[i][j];
-	};
+	}
 
 	/* Set stage data, and initialize cells accordingly
 	 *
 	 * @param {Object} stageData - stage data as it comes from stages.json
 	 */
-	this.setStage = function (stageData) {
+	setStage (stageData) {
 		this.gemSpawner.setStage(stageData);
 
-		for (var i = 0; i < grid_width; i++) {
-			for (var j = 0; j < grid_height; j++) {
+		for (var i = 0; i < GRID_WIDTH; i++) {
+			for (var j = 0; j < GRID_HEIGHT; j++) {
 				var tileData = stageData.tiles[i][j];
 				var cell = this.getCell(i, j);
 				cell.setData(tileData);
 			}
 		}
-	};
-});
+	}
+}
 
 /* Swap two cells' item. This occurs when user swipe two cells.
  *
@@ -156,14 +151,14 @@ function swapCells(source, target) {
 
 	this.emit('grid:gemSwapped');
 
-	swapAnimation.call(this, source, target, bind(this, function () {
+	swapAnimation.call(this, source, target, () => {
 		var foundMatch = checkForMatch.call(this, 1);
 		// NOTA: following code has been commented out because game felt more fun without.
 		// if (!foundMatch) {
 		// 	// cancel the last move if no match occured from it
 		// 	cancelLastMove.call(this);
 		// }
-	}));
+	});
 }
 
 /* Create and start the swap animation, then call provided callback once it finishes
@@ -195,9 +190,9 @@ function cancelLastMove() {
 	var source = this._lastMove.source;
 	var target = this._lastMove.target;
 
-	swapAnimation.call(this, source, target, bind(this, function () {
+	swapAnimation.call(this, source, target, () => {
 		this._isInteractionLocked = false;
-	}));
+	});
 }
 
 /* Check the grid for matching cells and mark them as `matched`.
@@ -208,8 +203,8 @@ function cancelLastMove() {
 function checkForMatch(iteration) {
 	var foundMatch = false;
 
-	for (var i = 0; i < grid_width; i++) {
-		for (var j = 0; j < grid_height; j++) {
+	for (var i = 0; i < GRID_WIDTH; i++) {
+		for (var j = 0; j < GRID_HEIGHT; j++) {
 
 			var cell = this.getCell(i, j);
 			if (cell.isEmpty) {
@@ -220,7 +215,7 @@ function checkForMatch(iteration) {
 			var right  = this.getCell(i + 1, j);
 			var top    = this.getCell(i, j - 1);
 			var bottom = this.getCell(i, j + 1);
-			
+
 			// horizontal match
 			if (left && left.isMatchable(cell) && right && right.isMatchable(cell)) {
 				cell.matched = true;
@@ -258,8 +253,8 @@ function clearMatchingGem(iteration) {
 	var gemCleared = 0;
 	var bottleCleared = 0;
 
-	for (var i = 0; i < grid_width; i++) {
-		for (var j = 0; j < grid_height; j++) {
+	for (var i = 0; i < GRID_WIDTH; i++) {
+		for (var j = 0; j < GRID_HEIGHT; j++) {
 			var cell = this.getCell(i, j);
 			if (!cell.matched) {
 				continue;
@@ -268,7 +263,7 @@ function clearMatchingGem(iteration) {
 			var itemType = cell.item.type;
 			gemCleared += cell.clearGem(this.gemPool);
 
-			if (itemType === bottle_item_type) {
+			if (itemType === BOTTLE_ITME_TYPE) {
 				bottleCleared += 1;
 			}
 		}
@@ -285,7 +280,7 @@ function clearMatchingGem(iteration) {
  * create their falling animations. When all animations finishes, check the
  * grid again for matches (next iteration in the match detection)
  *
- * NOTA: falling is done in two passes: first vertically (priority), 
+ * NOTA: falling is done in two passes: first vertically (priority),
  *       then diagonally
  *
  * @param {number} iteration - iteration number in the match detection process
@@ -295,14 +290,14 @@ function makeGemFall(iteration) {
 	var hasFallen = false;
 
 	// make gem falls vertically
-	for (j = grid_height - 2; j >= 0; j--) {
-		for (i = 0; i < grid_width; i++) {
+	for (j = GRID_HEIGHT - 2; j >= 0; j--) {
+		for (i = 0; i < GRID_WIDTH; i++) {
 			hasFallen = this.getCell(i, j).makeFallVertically() || hasFallen;
 		}
 	}
 
 	// make new gem appears and fall vertically from the top
-	for (i = 0; i < grid_width; i++) {
+	for (i = 0; i < GRID_WIDTH; i++) {
 		cell = this.getCell(i, 0);
 		if (!cell || cell.isEmpty || cell.item) {
 			continue;
@@ -321,7 +316,7 @@ function makeGemFall(iteration) {
 			cell.setData(this.gemSpawner.getGem());
 
 			cell.item.updateOpts({
-				y: tile_size * (cell.j - spawn)
+				y: TILE_SIZE * (cell.j - spawn)
 			});
 
 			// animation
@@ -331,8 +326,8 @@ function makeGemFall(iteration) {
 	}
 
 	// make gem falls diagonally
-	for (j = grid_height - 1; j >= 0; j--) {
-		for (i = 0; i < grid_width; i++) {
+	for (j = GRID_HEIGHT - 1; j >= 0; j--) {
+		for (i = 0; i < GRID_WIDTH; i++) {
 			if (this.getCell(i, j).makeFallDiagonally()) {
 				hasFallen = true;
 
@@ -350,7 +345,7 @@ function makeGemFall(iteration) {
 	// wait for animation to finish if any, and iterate to the next step
 	if (hasFallen) {
 		// wait for all fall animations to finish before next step
-		animate.getGroup('gemFallAnimation').once('Finish', bind(this, makeGemFall, iteration));
+		animate.getGroup('gemFallAnimation').once('Finish', makeGemFall.bind(this, iteration));
 	} else {
 		// iterate on checkForMatch
 		iteration += 1;

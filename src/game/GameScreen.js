@@ -1,44 +1,33 @@
-import math.util as util;
-import ui.View as View;
-import ui.ImageView as ImageView;
-import src.Boat as Boat;
-import src.Clouds as Clouds;
-import src.Gauge as Gauge;
-import src.Money as Money;
-import src.Island as Island;
-import src.Grid as Grid;
-import src.soundController as soundController;
+import util from 'math/util';
+import View from 'ui/View';
+import ImageView from 'ui/ImageView';
+import GestureView from 'ui/GestureView';
+import Boat from 'src/game/Boat';
+import Clouds from 'src/game/Clouds';
+import Gauge from 'src/game/Gauge';
+import Money from 'src/game/Money';
+import Island from 'src/game/Island';
+import Grid from 'src/game/Grid';
+import stagesData from 'src/conf/stages.json';
+import sounds from 'src/lib/sounds';
 
-import ui.GestureView as GestureView;
 
-var stagesData = JSON.parse(CACHE['resources/data/stages.json']);
+export default class GameScreen extends View {
+  constructor (opts) {
+    super(opts);
+		this.stageId = 0;
+		this.targetScore = 0;
 
-exports = Class(View, function GameScreen(supr) {
-	this.stageId = 0;
-	this.targetScore = 0;
-
-	this.init = function (opts) {
-		opts = merge(opts, {
-			x: 0,
-			y: 0
-		});
-
-		supr(this, 'init', [opts]);
-
-		this.build();
-	};
-
-	this.build = function() {
 		// clouds animation
 		new Clouds({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 100
 		});
 
 		// sea
 		new View({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 100,
 			width: 320,
@@ -48,34 +37,34 @@ exports = Class(View, function GameScreen(supr) {
 
 		// boat animation
 		new Boat({
-			superview: this,
+			parent: this,
 			x: 10,
 			y: 10
 		});
 
 		// grid background
 		this.island = new Island({
-			superview: this,
+			parent: this,
 			x: 0,
 			y: 150
 		});
 
 		// grid
 		this.grid = new Grid({
-			superview: this,
+			parent: this,
 			x: 32,
 			y: 150 + 32
 		});
 
 		// hud elements
 		this.moneyScore = new Money({
-			superview: this,
+			parent: this,
 			x: 146,
 			y: 20
 		});
 
 		this.staminaGauge = new Gauge({
-			superview: this,
+			parent: this,
 			x: 150,
 			y: 86
 		});
@@ -83,11 +72,11 @@ exports = Class(View, function GameScreen(supr) {
 		// set event listeners
 		this.on('app:start', resetGame.bind(this));
 		this.on('app:nextStage', goToNextStage.bind(this));
-		this.grid.on('grid:clearGem', bind(this, onClearGem));
-		this.grid.on('grid:gemSwapped', bind(this, onSwapCells));
-		this.grid.on('grid:turnEnd', bind(this, onTurnEnd));
-	};
-});
+		this.grid.on('grid:clearGem', onClearGem.bind(this));
+		this.grid.on('grid:gemSwapped', onSwapCells.bind(this));
+		this.grid.on('grid:turnEnd', onTurnEnd.bind(this));
+	}
+}
 
 /* Player restart a fresh new game: go back to first stage and reset UI.
  */
@@ -147,11 +136,10 @@ function onClearGem(match, bottle, iteration) {
 	this.moneyScore.addValue(points);
 
 	// sound effects
-	var sound = soundController.getSound();
-	sound.play('explode');
+	sounds.playSound('explode');
 	if (iteration > 1) {
 		var comboId = util.clip(iteration, 2, 6);
-		sound.play('combo_x' + comboId);
+		sounds.playSound('combo_x' + comboId);
 	}
 }
 
@@ -162,8 +150,7 @@ function onSwapCells() {
 	this.staminaGauge.addValue(-1);
 
 	// sound effect
-	var sound = soundController.getSound();
-	sound.play('swap');
+	sounds.playSound('swap');
 }
 
 /* Called when all gems have been cleared and fall, and grid is in a stable state
@@ -178,6 +165,6 @@ function onTurnEnd() {
 		this.emit('game:gameOver');
 	} else if (stamina <= 3) {
 		// play a warning sound if stamina runs low
-		soundController.getSound().play('warning');
+		sounds.playSound('warning');
 	}
 }

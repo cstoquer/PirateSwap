@@ -1,31 +1,31 @@
-import ui.View as View;
-import ui.ViewPool as ViewPool;
-import src.Fx as Fx;
+import View from 'ui/View';
+import ViewPool from 'ui/ViewPool';
+import Fx from 'src/game/Fx';
 
 
 /* Manage a pool of fx animations for gem explosion
  */
-exports = Class(View, function FxSystem(supr) {
-	this.init = function (opts) {
-		supr(this, 'init', [opts]);
+export default class FxSystem extends View {
+	constructor (opts) {
+    super(opts);
 
 		this.pool = new ViewPool({
 			ctor: Fx,
 			initCount: 20,
 			initOpts: {
-				superview: this
+				parent: this
 			}
 		});
 
 		this.actives = [];
-	};
+	}
 
 	/* Add an fx in the screen
 	 *
 	 * @param {number} i - i coordinate of the item in the grid
 	 * @param {number} j - j coordinate of the item in the grid
 	 */
-	this.addFx = function (i, j) {
+	addFx (i, j) {
 		var fx = this.pool.obtainView();
 
 		fx.updateOpts({
@@ -38,14 +38,14 @@ exports = Class(View, function FxSystem(supr) {
 		fx.play();
 
 		// set a timeout to clear and remove this fx after 1s
-		window.setTimeout(bind(this, this.removeFx, fx), 1000);
-	};
+		window.setTimeout(this.removeFx.bind(this, fx), 1000);
+	}
 
 	/* remove an fx fron the screen
 	 *
 	 * @param {Fx} fx - fx instance to be removed
 	 */
-	this.removeFx = function (fx) {
+	removeFx (fx) {
 		this.pool.releaseView(fx);
 		var index = this.actives.indexOf(fx);
 		if (index === -1) {
@@ -53,13 +53,13 @@ exports = Class(View, function FxSystem(supr) {
 			return;
 		}
 		this.actives.splice(index, 1);
-	};
+	}
 
 	/* tick particle engines of all active fx
 	 */
-	this.tick = function (dt) {
+	tick (dt) {
 		for (var i = this.actives.length - 1; i >= 0; i--) {
 			this.actives[i].tickParticle(dt);
 		}
-	};
-});
+	}
+}
